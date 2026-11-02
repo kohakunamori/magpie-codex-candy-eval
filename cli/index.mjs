@@ -66,8 +66,13 @@ async function executePending(path,bin,cliOpts) {
   const opts=getOptions(path);
   const request=opts.request;
   if(!request || !request.id || request.id===opts.handledId)return false;
-  const jobs=jobsFor(request);
-  let latest={...opts,running:{id:request.id,started:new Date().toISOString(),done:0,total:jobs.length,error:''}};
+  let jobs;
+  try {jobs=jobsFor(request);} catch(e) {
+    saveOptions({...opts,request:null,handledId:request.id,running:null,lastError:e.message},bin);
+    return true;
+  }
+  // Mark handled *before* the first billed request: a runner crash must not replay the batch.
+  let latest={...opts,handledId:request.id,request:null,lastError:'',running:{id:request.id,started:new Date().toISOString(),done:0,total:jobs.length,error:''}};
   saveOptions(latest,bin);
   for(let i=0;i<jobs.length;i++) {
     let result;
@@ -102,6 +107,10 @@ async function main() {
   if(command!=='watch'&&command!=='once')throw new Error('Unknown command '+command);
   const path=configPath(opts.config), bin=opts['magpie-bin']||'magpie';
   console.log('Monitoring plugin requests via '+path+'; no tests run until requested.');
+  const initial=getOptions(path);
+  if(initial.running && initial.handledId===initial.running.id){
+    saveOptions({...initial,running:null,lastError:'Prior run stopped; remaining requests were NOT automatically retried to avoid spending quota twice.'},bin);
+  }
   const once=async()=>{try {await executePending(path,bin,opts);} catch(e){console.error(e.message);if(command==='once')process.exitCode=1;}};
   if(command==='once')return once();
   const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));

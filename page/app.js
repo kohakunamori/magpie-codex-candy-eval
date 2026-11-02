@@ -14,7 +14,7 @@ async function load() {
     const r=current.running;
     $('status').textContent='正在测试 '+r.done+'/'+r.total+' 个账号。';
   }else if(current.request){$('status').textContent='已提交测试请求，等待本地运行器接收……';}
-  else {$('status').textContent='就绪（需要在终端启动 watch 才能运行测试）';}
+  else {$('status').textContent=current.lastError ? ('上次运行：'+current.lastError) : '就绪（需要在终端启动 watch 才能运行测试）';}
   const root=$('history');root.replaceChildren();
   if(!(current.history||[]).length){root.append(el('p','暂无历史记录'));return;}
   for(const r of current.history){

@@ -56,7 +56,7 @@ node cli/index.mjs once
 node cli/index.mjs watch --interval 3000
 ```
 
-`run` does **not** write to Magpie's plugin history; redirect its JSON output if desired. `once` processes one pending UI task (not an automatic recurring test). For scheduling, use the OS scheduler to invoke `run` with explicit parameters and save its output. The `watch` command may be left running while you use the plugin UI.
+`run` does **not** write to Magpie's plugin history; redirect its JSON output if desired. `once` processes one pending UI task (not an automatic recurring test). For scheduling, use the OS scheduler to invoke `run` with explicit parameters and save its output. The `watch` command may be left running while you use the plugin UI. Run **only one** watcher per Magpie profile. The watcher marks a submitted batch as handled before billing any model requests, so a crash does not automatically repeat potentially costly tests; inspect the status and resubmit intentionally.
 
 Configuration: `MAGPIE_BASE_URL` (default `http://127.0.0.1:3425/v1`), `MAGPIE_API_KEY` (defaults to local gateway key `magpie`), `--context simple|codex`, `--config PATH` to select a nonstandard `plugins.json`, `--magpie-bin PATH` for CLI. Non-loopback gateways are blocked unless `--allow-remote` is explicitly supplied.
 
@@ -78,7 +78,7 @@ npm test
 go test ./cmd/fingerprint
 ```
 
-CI runs checks on Linux and Windows. Tests are mock-based; they do not call real models or charge quota.
+CI runs checks on Linux and Windows. Tests are mock-based; they do not call real models or charge quota. To check the real Magpie plugin integration without calling a real model, run `node tests/manual-integration.mjs` on a machine with the Magpie CLI on PATH; it uses an isolated temporary Magpie configuration and a fake local gateway.
 
 ## Licensing
 
