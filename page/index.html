@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Codex 降智测试</title>
+<link rel="stylesheet" href="style.css">
+<script src="_magpie/bridge.js"></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<main>
+<header><h1>Codex 降智测试</h1><p>糖果题 · 指纹 · 鹈鹕 / 使用 Magpie 原生页面 + 本地测试运行器</p></header>
+<div id="warning" class="notice">需要在本机运行 node cli/index.mjs watch；测试会消耗模型额度，指纹测试每账号至少 3 次请求。</div>
+<form id="form">
+<label>模型 ID（完整 provider/model）<input id="model" required placeholder="codex/gpt-6.1-sol"></label>
+<label>账号（邮箱或 Routing 页 ID，一行一个）<textarea id="accounts" rows="3" required placeholder="account@example.com"></textarea></label>
+<div class="controls">
+<label>测试类型<select id="type"><option value="candy">糖果题（答案 21）</option><option value="fingerprint">数字指纹（3 题）</option><option value="pelican">鹈鹕 SVG</option></select></label>
+<label>推理强度<select id="effort"><option value="none">默认</option><option value="low">low</option><option value="medium">medium</option><option value="high">high</option></select></label>
+<label>糖果测试次数<input type="number" id="runs" min="1" max="10" value="1"></label>
+<label>鹈鹕版本<select id="variant"><option value="original">原版</option><option value="all-in-one">多合一</option></select></label>
+<label>测试上下文<select id="context"><option value="codex">近似 Codex 上下文（高耗费）</option><option value="simple">简单提示词（不等价于原版）</option></select></label>
+</div>
+<div class="buttons"><button id="run" type="submit">开始测试</button><button id="refresh" type="button">刷新结果</button><button id="clear" type="button">清空历史</button></div>
+</form>
+<p id="status" role="status">正在连接 Magpie 插件页面……</p>
+<section><h2>历史结果</h2><div id="history"><p>尚无记录</p></div></section>
+<footer>测试结果不能单独证明模型被降级。原版 CPA Candy Eval 与 LM Detector 使用 MIT 许可证。</footer>
+</main>
+</body>
+</html>

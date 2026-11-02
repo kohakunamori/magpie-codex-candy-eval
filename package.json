@@ -1,0 +1,41 @@
+{
+  "name": "magpie-codex-candy-eval",
+  "version": "0.1.0",
+  "description": "Native Magpie page plus local evaluation companion for Codex candy, pelican, and fingerprint tests",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "magpie-candy-eval": "./cli/index.mjs"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check cli/index.mjs && node --check lib/eval.mjs && node --check lib/gateway.mjs && node --check page/app.js"
+  },
+  "keywords": [
+    "magpie-plugin",
+    "codex",
+    "candy-eval",
+    "model-fingerprint"
+  ],
+  "magpie": {
+    "name": "Codex 降智测试",
+    "page": {
+      "title": "Codex evaluation",
+      "titles": {
+        "zh": "Codex 降智测试"
+      },
+      "file": "page/index.html"
+    },
+    "permissions": [
+      "providers:list"
+    ],
+    "options": {
+      "model": "codex/gpt-6.1-sol",
+      "type": "candy",
+      "effort": "low",
+      "runs": 1,
+      "variant": "original",
+      "accounts": ""
+    }
+  }
+}

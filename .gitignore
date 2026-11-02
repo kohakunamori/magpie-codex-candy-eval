@@ -1,0 +1,7 @@
+node_modules/
+.cache/
+*.log
+*.tmp
+.DS_Store
+.env
+results*.json
